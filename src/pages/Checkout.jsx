@@ -2,6 +2,8 @@ import React from "react";
 import { Footer, Navbar } from "../components";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+
+
 const Checkout = () => {
   const state = useSelector((state) => state.handleCart);
 
@@ -43,18 +45,18 @@ const Checkout = () => {
                 <div className="card-body">
                   <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                      Products ({totalItems})<span>${Math.round(subtotal)}</span>
+                      Products ({totalItems})<span>Ksh.{Math.round(subtotal)}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                       Shipping
-                      <span>${shipping}</span>
+                      <span>Ksh.{shipping}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                       <div>
                         <strong>Total amount</strong>
                       </div>
                       <span>
-                        <strong>${Math.round(subtotal + shipping)}</strong>
+                        <strong>Ksh.{Math.round(subtotal + shipping)}</strong>
                       </span>
                     </li>
                   </ul>
@@ -138,7 +140,7 @@ const Checkout = () => {
 
                       <div className="col-12">
                         <label for="address2" className="form-label">
-                          Address 2{" "}
+                          Address 2
                           <span className="text-muted">(Optional)</span>
                         </label>
                         <input
@@ -156,7 +158,7 @@ const Checkout = () => {
                         <br />
                         <select className="form-select" id="country" required>
                           <option value="">Choose...</option>
-                          <option>India</option>
+                          <option value="">Kenya</option>
                         </select>
                         <div className="invalid-feedback">
                           Please select a valid country.
@@ -170,7 +172,9 @@ const Checkout = () => {
                         <br />
                         <select className="form-select" id="state" required>
                           <option value="">Choose...</option>
-                          <option>Punjab</option>
+                          <option value="">Nairobi</option>
+                          <option value="">Nakuru</option>
+                          <option value="">Mombasa</option>
                         </select>
                         <div className="invalid-feedback">
                           Please provide a valid state.
@@ -271,7 +275,7 @@ const Checkout = () => {
 
                     <button
                       className="w-100 btn btn-primary "
-                      type="submit" disabled
+                      type="submit"
                     >
                       Continue to checkout
                     </button>
