@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: 'https://carways.cleverapps.io'
+    baseURL: 'http://localhost:4000'
 });

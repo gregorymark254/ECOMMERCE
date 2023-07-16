@@ -1,11 +1,54 @@
-import React from "react";
+import React,{ useState } from "react";
 import { Footer, Navbar } from "../components";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import axios from '../api/api'
 
+const URL = '/api/v2/checkout'
 
 const Checkout = () => {
   const state = useSelector((state) => state.handleCart);
+
+  const [firstName,setFirstname] = useState('')
+  const [lastName,setLastname] = useState('')
+  const [email,setEmail] = useState('')
+  const [address,setAdress] = useState('')
+  const [address2,setAdress2] = useState('')
+  const [country,setCountry] = useState('')
+  const [states,setStates] = useState('')
+  const [zip,setZip] = useState('')
+  const [name,setName] = useState('')
+  const [number,setNumber] = useState('')
+  const [date,setDate] = useState('')
+  const [cvv,setCvv] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await axios.post(URL,
+      JSON.stringify({ firstName,lastName, email,address ,country,states, zip,name,number,date,cvv}),
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      toast.success("Registration Successful");
+      navigate("/home");
+    } catch (error) {
+      if (!error?.response) {
+        toast.error("No Server Response");
+      } else if (error.response?.status === 400) {
+        toast.error("All fields are required");
+      } else if (error.response?.status === 409) {
+        toast.error("Email Taken");
+      } else {
+        toast.error("Registration Failed");
+      }
+      console.log(error);
+    }
+  }
+  
 
   const EmptyCart = () => {
     return (
@@ -33,6 +76,8 @@ const Checkout = () => {
     state.map((item) => {
       return (totalItems += item.qty);
     });
+
+
     return (
       <>
         <div className="container py-5">
@@ -69,7 +114,7 @@ const Checkout = () => {
                   <h4 className="mb-0">Billing address</h4>
                 </div>
                 <div className="card-body">
-                  <form className="needs-validation" novalidate>
+                  <form className="needs-validation" onSubmit={handleSubmit}>
                     <div className="row g-3">
                       <div className="col-sm-6 my-1">
                         <label for="firstName" className="form-label">
@@ -80,8 +125,9 @@ const Checkout = () => {
                           className="form-control"
                           id="firstName"
                           placeholder=""
-                          value=""
                           required
+                          value={firstName}
+                          onChange={(e) => setFirstname(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Valid first name is required.
@@ -97,8 +143,9 @@ const Checkout = () => {
                           className="form-control"
                           id="lastName"
                           placeholder=""
-                          value=""
                           required
+                          value={lastName}
+                          onChange={(e) => setLastname(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Valid last name is required.
@@ -115,6 +162,8 @@ const Checkout = () => {
                           id="email"
                           placeholder="you@example.com"
                           required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Please enter a valid email address for shipping
@@ -132,6 +181,8 @@ const Checkout = () => {
                           id="address"
                           placeholder="1234 Main St"
                           required
+                          value={address}
+                          onChange={(e) => setAdress(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Please enter your shipping address.
@@ -148,6 +199,8 @@ const Checkout = () => {
                           className="form-control"
                           id="address2"
                           placeholder="Apartment or suite"
+                          value={address2}
+                          onChange={(e) => setAdress2(e.target.value)}
                         />
                       </div>
 
@@ -156,7 +209,11 @@ const Checkout = () => {
                           Country
                         </label>
                         <br />
-                        <select className="form-select" id="country" required>
+                        <select className="form-select" id="country" 
+                          required
+                          value={country}
+                          onChange={(e) => setCountry(e.target.value)}
+                          >
                           <option value="">Choose...</option>
                           <option value="">Kenya</option>
                         </select>
@@ -170,7 +227,11 @@ const Checkout = () => {
                           State
                         </label>
                         <br />
-                        <select className="form-select" id="state" required>
+                        <select className="form-select" id="state" 
+                          required
+                          value={states}
+                          onChange={(e) => setStates(e.target.value)}
+                        >
                           <option value="">Choose...</option>
                           <option value="">Nairobi</option>
                           <option value="">Nakuru</option>
@@ -191,6 +252,8 @@ const Checkout = () => {
                           id="zip"
                           placeholder=""
                           required
+                          value={zip}
+                          onChange={(e) => setZip(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Zip code required.
@@ -213,6 +276,8 @@ const Checkout = () => {
                           id="cc-name"
                           placeholder=""
                           required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
                         />
                         <small className="text-muted">
                           Full name as displayed on card
@@ -232,6 +297,8 @@ const Checkout = () => {
                           id="cc-number"
                           placeholder=""
                           required
+                          value={number}
+                          onChange={(e) => setNumber(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Credit card number is required
@@ -248,6 +315,8 @@ const Checkout = () => {
                           id="cc-expiration"
                           placeholder=""
                           required
+                          value={date}
+                          onChange={(e) => setDate(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Expiration date required
@@ -264,6 +333,8 @@ const Checkout = () => {
                           id="cc-cvv"
                           placeholder=""
                           required
+                          value={cvv}
+                          onChange={(e) => setCvv(e.target.value)}
                         />
                         <div className="invalid-feedback">
                           Security code required
@@ -288,6 +359,8 @@ const Checkout = () => {
       </>
     );
   };
+
+  
   return (
     <>
       <Navbar />

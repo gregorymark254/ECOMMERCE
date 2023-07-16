@@ -4,6 +4,8 @@ import { Footer, Navbar } from "../components";
 import { toast } from 'react-toastify';
 import axios from '../api/api'
 
+const URL = '/api/v1/login'
+
 const Login = () => {
 
   const [email,setEmail] = useState('')
